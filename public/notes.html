@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Note Taker</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/5.2.1/flatly/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="./assets/css/styles.css" />
+  </head>
+
+  <body>
+    <nav class="navbar navbar-dark bg-success">
+      <a class="navbar-brand" style="margin-left: 15px" href="/">Note Taker</a>
+      <div class="icons fa-xl">
+        <i class="fas fa-save text-light addNote" style="margin: 20px"></i>
+        <i
+          class="fas fa-plus text-light newNote"
+          style="margin-right: 15px"
+        ></i>
+      </div>
+    </nav>
+    <section class="container-fluid">
+      <div class="row">
+        <div class="col-4 invContainer">
+          <div class="card">
+            <ul class="invGroup"></ul>
+          </div>
+        </div>
+        <div class="col-8">
+          <input
+            class="noteHeading"
+            placeholder="Title"
+            maxlength="28"
+            type="text"
+          /><textarea class="noteBody" placeholder="Note Text"></textarea>
+        </div>
+      </div>
+    </section>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <script src="./assets/js/index.js"></script>
+  </body>
+</html>

@@ -1,0 +1,29 @@
+{
+  "name": "note-taker",
+  "version": "1.0.0",
+  "description": "A Note taking app created using express.js + json with get, post and delete functions. App is to be deployed to Heroku.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/A-N26/Note-Taker-express-.git"
+  },
+  "keywords": [
+    "Note-Taker",
+    "Express.js",
+    "JSON",
+    "Heroku"
+  ],
+  "author": "A-N26",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/A-N26/Note-Taker-express-/issues"
+  },
+  "homepage": "https://github.com/A-N26/Note-Taker-express-#readme",
+  "dependencies": {
+    "express": "^4.18.1"
+  }
+}

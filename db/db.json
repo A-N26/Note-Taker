@@ -1,0 +1,19 @@
+{
+  "notes": [
+    {
+      "title": "test Title",
+      "text": "test text",
+      "id": "0"
+    },
+    {
+      "title": "Welcome to a note taking application.",
+      "text": "This allows you to create notes by clicking the plus sign on top right and then add/save them using the floppy icon located besides the plus sign.",
+      "id": "1"
+    },
+    {
+      "title": "Delete notes",
+      "text": "To delete the added notes plus click the recycle big icon situated next to the title of the saved notes in the list.",
+      "id": "2"
+    }
+  ]
+}

@@ -1,0 +1,56 @@
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+/* .addNote {
+  display: none;
+} */
+icons i {
+  margin-left: 15px;
+  margin-right: 15px;
+  font-size: 15px;
+  cursor: pointer;
+}
+.noteHeading,
+.noteBody {
+  color: black;
+  width: 100%;
+  outline: none;
+  border: none;
+}
+.noteHeading {
+  height: 50px;
+  margin-top: 13px;
+  font-size: 50px;
+}
+.noteBody:read-only,
+.noteHeading:read-only {
+  color: dimgray;
+}
+.invContainer {
+  padding-left: 0;
+}
+.invContainer .card {
+  border-bottom: none;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.invContainer i {
+  font-size: 10px;
+  cursor: pointer;
+}
+.invContainer .invNoteContent {
+  border-left: none;
+  border-right: none;
+  padding: 20px;
+  cursor: pointer;
+}
+.invContainer .invGroup,
+.invContainer .invNoteContent:first-child,
+.invContainer .card {
+  border-top: none;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
