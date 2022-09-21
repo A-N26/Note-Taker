@@ -6,8 +6,8 @@ const app = express();
 // PORT
 const PORT = process.env.PORT || 3000;
 // ↓Requiring routers for express app.
-const apiRoutes = require('../routes/apiRoutes');
-const htmlRoutes = require('../routes/htmlRoutes');
+const apiRoutes = require('./routes/apiRoutes');
+const htmlRoutes = require('./routes/htmlRoutes');
 
 // ↓.use statements for data parsing.
 // Express middleware
