@@ -54,7 +54,7 @@ const ManageNoteInv = () => {
         title: $noteHeading.val(),
         text: $noteBody.val(),
     };
-    $addNoteBtn(newNote).then(() => {
+    addNote(newNote).then(() => {
         getDisplayedNotes();
         displayCurrentNote();
     });
@@ -123,7 +123,9 @@ const displayListNotes = (notes) => {
 
 // ↓To show notes from db in the list sidebar.
 const getDisplayedNotes = () => {
-    return getNotes().then(displayListNotes);
+    return getNotes().then(function (data) {
+        displayListNotes(data);
+    });
 };
 
 $addNoteBtn.on("click", ManageNoteInv);

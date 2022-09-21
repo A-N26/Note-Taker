@@ -1,10 +1,9 @@
 // ↓declarations
-const express = require('express');
 const path = require('path');
-const router = express.Router();
+const router = require("express").Router();
 
 // Send notes to the notes html file.
-router.get('api/notes', function (req, res) {
+router.get('/notes', function (req, res) {
     res.sendFile(path.join(__dirname, '../public/notes.html'));
 });
 
