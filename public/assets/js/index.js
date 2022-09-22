@@ -1,138 +1,184 @@
-// Declarations
-var $noteHeading = $(".noteHeading");
-var $noteBody = $(".noteBody");
-var $addNoteBtn = $(".addNote");
-var $newNoteBtn = $(".newNote");
-var $noteInv = $(".invContainer .invGroup");
+let noteTitle;
+let noteText;
+let saveNoteBtn;
+let newNoteBtn;
+let noteList;
 
-var Note_current = {};
+if (window.location.pathname === '/notes') {
+  noteTitle = document.querySelector('.note-title');
+  noteText = document.querySelector('.note-textarea');
+  saveNoteBtn = document.querySelector('.save-note');
+  newNoteBtn = document.querySelector('.new-note');
+  noteList = document.querySelectorAll('.list-container .list-group');
+}
 
-// ↓Ajax function to get notes stored in the database json file.
-const getNotes = function () {
-    return $.ajax({
-        url: 'api/notes.json',
-        method: 'GET',
-    });
+// Show an element
+const show = (elem) => {
+  elem.style.display = 'inline';
 };
 
-//↓Ajax function to save notes to the database json file.
-const saveNotes = function (note) {
-    return $.ajax({
-        url: 'api/notes.json',
-        data: note,
-        method: 'POST',
-    });
+// Hide an element
+const hide = (elem) => {
+  elem.style.display = 'none';
 };
 
-// ↓Ajax function to delete notes from the database json file.
-const deleteNotes = function (id) {
-    return $.ajax({
-        url: 'api/notes.json' + id,
-        method: 'DELETE',
-    });
+// activeNote is used to keep track of the note in the textarea
+let activeNote = {};
+
+const getNotes = () =>
+  fetch('/api/notes', {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+
+const saveNote = (note) =>
+  fetch('/api/notes', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(note),
+  });
+
+const deleteNote = (id) =>
+  fetch(`/api/notes/${id}`, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+
+const renderActiveNote = () => {
+  hide(saveNoteBtn);
+
+  if (activeNote.id) {
+    noteTitle.setAttribute('readonly', true);
+    noteText.setAttribute('readonly', true);
+    noteTitle.value = activeNote.title;
+    noteText.value = activeNote.text;
+  } else {
+    noteTitle.removeAttribute('readonly');
+    noteText.removeAttribute('readonly');
+    noteTitle.value = '';
+    noteText.value = '';
+  }
 };
 
-// ↓To display the current note.
-const displayCurrentNote = function () {
-    $addNoteBtn.hide();
-    if (Note_current.id) {
-        $noteHeading.attr("readonly", true);
-        $noteBody.attr("readonly", true);
-        $noteHeading.val(Note_current.Heading);
-        $noteBody.val(Note_current.Body);
-    } else {
-        $noteHeading.attr("readonly", false);
-        $noteBody.attr("readonly", false);
-        $noteHeading.val('');
-        $noteBody.val('');
-    };
+const handleNoteSave = () => {
+  const newNote = {
+    title: noteTitle.value,
+    text: noteText.value,
+  };
+  saveNote(newNote).then(() => {
+    getAndRenderNotes();
+    renderActiveNote();
+  });
 };
 
-// ↓To get the contents of the notes and save to the database.
-const ManageNoteInv = () => {
-    const newNote = {
-        title: $noteHeading.val(),
-        text: $noteBody.val(),
-    };
-    addNote(newNote).then(() => {
-        getDisplayedNotes();
-        displayCurrentNote();
-    });
+// Delete the clicked note
+const handleNoteDelete = (e) => {
+  // Prevents the click listener for the list from being called when the button inside of it is clicked
+  e.stopPropagation();
+
+  const note = e.target;
+  const noteId = JSON.parse(note.parentElement.getAttribute('data-note')).id;
+
+  if (activeNote.id === noteId) {
+    activeNote = {};
+  }
+
+  deleteNote(noteId).then(() => {
+    getAndRenderNotes();
+    renderActiveNote();
+  });
 };
 
-// ↓ To delete the note.
-const ManageInv_delete = (event) => {
-    event.stopCall();
-    const note = $(this).parent(".invNoteContent").data();
-    if (Note_current.id === note.id) {
-        Note_current = {};
+// Sets the activeNote and displays it
+const handleNoteView = (e) => {
+  e.preventDefault();
+  activeNote = JSON.parse(e.target.parentElement.getAttribute('data-note'));
+  renderActiveNote();
+};
+
+// Sets the activeNote to and empty object and allows the user to enter a new note
+const handleNewNoteView = (e) => {
+  activeNote = {};
+  renderActiveNote();
+};
+
+const handleRenderSaveBtn = () => {
+  if (!noteTitle.value.trim() || !noteText.value.trim()) {
+    hide(saveNoteBtn);
+  } else {
+    show(saveNoteBtn);
+  }
+};
+
+// Render the list of note titles
+const renderNoteList = async (notes) => {
+  let jsonNotes = await notes.json();
+  if (window.location.pathname === '/notes') {
+    noteList.forEach((el) => (el.innerHTML = ''));
+  }
+
+  let noteListItems = [];
+
+  // Returns HTML element with or without a delete button
+  const createLi = (text, delBtn = true) => {
+    const liEl = document.createElement('li');
+    liEl.classList.add('list-group-item');
+
+    const spanEl = document.createElement('span');
+    spanEl.classList.add('list-item-title');
+    spanEl.innerText = text;
+    spanEl.addEventListener('click', handleNoteView);
+
+    liEl.append(spanEl);
+
+    if (delBtn) {
+      const delBtnEl = document.createElement('i');
+      delBtnEl.classList.add(
+        'fas',
+        'fa-trash-alt',
+        'float-right',
+        'text-danger',
+        'delete-note'
+      );
+      delBtnEl.addEventListener('click', handleNoteDelete);
+
+      liEl.append(delBtnEl);
     }
-    deleteNotes(note.id).then(() => {
-        getDisplayedNotes();
-        displayCurrentNote();
-    });
+
+    return liEl;
+  };
+
+  if (jsonNotes.length === 0) {
+    noteListItems.push(createLi('No saved Notes', false));
+  }
+
+  jsonNotes.forEach((note) => {
+    const li = createLi(note.title);
+    li.dataset.note = JSON.stringify(note);
+
+    noteListItems.push(li);
+  });
+
+  if (window.location.pathname === '/notes') {
+    noteListItems.forEach((note) => noteList[0].append(note));
+  }
 };
 
-// ↓Displaying currently active note.
-const ManageNoteDisplay = () => {
-    Note_current = $(this).data();
-    displayCurrentNote();
-};
+// Gets notes from the db and renders them to the sidebar
+const getAndRenderNotes = () => getNotes().then(renderNoteList);
 
-// ↓for user to be able to input a new note by setting currently active note as empty object.
-const ManageNotesDisplay = () => {
-    Note_current = {};
-    displayCurrentNote();
-};
+if (window.location.pathname === '/notes') {
+  saveNoteBtn.addEventListener('click', handleNoteSave);
+  newNoteBtn.addEventListener('click', handleNewNoteView);
+  noteTitle.addEventListener('keyup', handleRenderSaveBtn);
+  noteText.addEventListener('keyup', handleRenderSaveBtn);
+}
 
-// ↓To hide or show the save button.
-const ManageAddBtn_display = () => {
-    if (!$noteHeading.val().trim() || !$noteBody.val().trim()) {
-        $addNoteBtn.hide();
-    } else {
-        $addNoteBtn.show();
-    }
-};
+getAndRenderNotes();
 
-// ↓Display a list of notes.
-const displayListNotes = (notes) => {
-    $noteInv.empty();
-    const ListedNotes = [];
-
-    const create$li = (text, withDeleteButton = true) => {
-        const $li = $("<li class ='.invNoteContent'></li>")
-        const $span = $('<span></span>').text(text);
-        $li.append($span);
-        if (withDeleteButton) {
-            const $delBtn = $(
-                "<li class = 'fas fa-trash-alt float-right text-danger delete-note'></li>"
-            );
-            $li.append($delBtn);
-        }
-        return $li;
-    };
-    if (notes.length === 0) {
-        ListedNotes.push(create$li("No saved notes found.", false));
-    }
-    notes.forEach((notes) => {
-        const $li = create$li(notes.Heading).data(note);
-        ListedNotes.push($li);
-    });
-    $noteInv.append(ListedNotes);
-};
-
-// ↓To show notes from db in the list sidebar.
-const getDisplayedNotes = () => {
-    return getNotes().then(function (data) {
-        displayListNotes(data);
-    });
-};
-
-$addNoteBtn.on("click", ManageNoteInv);
-$noteInv.on("click", ".invNoteContent", ManageNoteDisplay);
-$newNoteBtn.on("click", ManageNotesDisplay);
-$noteInv.on("click", ".delete-note", ManageInv_delete);
-$noteHeading.on("keyup", ManageAddBtn_display);
-$noteBody.on("keyup", ManageAddBtn_display);
-
-getDisplayedNotes();
