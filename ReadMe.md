@@ -41,7 +41,7 @@ Once that is done, in terminal type `node server.js` or `npm start`, to start th
 
 <summary>Github Links</summary>
 
-> [Note taker](https://github.com/A-N26/Note-Taker.git)
+> [Note taker repo](https://github.com/A-N26/Note-Taker.git)
 
 - > [Heroku](https://note-taker-app-deployment.herokuapp.com/)
 
