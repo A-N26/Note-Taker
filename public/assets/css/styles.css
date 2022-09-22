@@ -7,10 +7,9 @@ body {
 .addNote {
   display: none;
 }
-icons i {
+.icons i {
   margin-left: 15px;
   margin-right: 15px;
-  font-size: 15px;
   cursor: pointer;
 }
 .noteHeading,
@@ -24,6 +23,10 @@ icons i {
   height: 50px;
   margin-top: 13px;
   font-size: 50px;
+}
+.noteBody {
+  resize: none;
+  padding-top: 15px;
 }
 .noteBody:read-only,
 .noteHeading:read-only {

@@ -8,7 +8,7 @@ router.get('/notes', function (req, res) {
 });
 
 // Send notes to the index html file.
-router.get('/*', function (req, res) {
+router.get('*', function (req, res) {
     res.sendFile(path.join(__dirname, '../public/index.html'));
 });
 

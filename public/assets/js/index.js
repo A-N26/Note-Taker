@@ -11,7 +11,7 @@ var Note_current = {};
 const getNotes = function () {
     return $.ajax({
         url: 'api/notes.json',
-        method: 'Get',
+        method: 'GET',
     });
 };
 
@@ -20,7 +20,7 @@ const saveNotes = function (note) {
     return $.ajax({
         url: 'api/notes.json',
         data: note,
-        method: 'Post',
+        method: 'POST',
     });
 };
 
@@ -28,7 +28,7 @@ const saveNotes = function (note) {
 const deleteNotes = function (id) {
     return $.ajax({
         url: 'api/notes.json' + id,
-        method: 'Delete',
+        method: 'DELETE',
     });
 };
 

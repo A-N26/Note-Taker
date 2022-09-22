@@ -1,5 +1,4 @@
 // ↓declarations
-const express = require('express');
 const router = require("express").Router();
 const { notes } = require('../db/db');
 const { newNotes, deleteCreatedNotes } = require('../lib/store');
@@ -19,7 +18,7 @@ router.post('/notes', (req, res) => {
 
 // Delete notes from database json file.
 router.delete('/notes/:id', (req, res) => {
-    deleteCreatedNotes(notes[req.params.id]);
+    deleteCreatedNotes(notes, req.params.id);
     res.json(notes);
 })
 
